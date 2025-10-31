@@ -1,0 +1,52 @@
+def play(board):
+
+    # Special case: empty board, first move
+    if not ('x' in board or 'o' in board):
+        return 4
+
+    # Determine whose turn it is
+    if board.count('x') == board.count('o'):
+        player = 'x'
+        enemy = 'o'
+    else:
+        player = 'o'
+        enemy = 'x'
+
+    # Define winning lines (knowledge base)
+    wins = [
+        [0,1,2], [3,4,5], [6,7,8],
+        [0,3,6], [1,4,7], [2,5,8],
+        [0,4,8], [2,4,6]
+    ]
+
+    # Rule 1: Win if possible
+    # Rule 2: Block opponent
+    for i in wins:
+        winblock = []
+        for a in i:
+            winblock.append(board[a])
+        
+        # Check if player can win
+        if winblock.count(player) == 2 and winblock.count('') == 1:
+            for a in i:
+                if board[a] == '':
+                    return a
+        
+        # Check if need to block opponent
+        if winblock.count(enemy) == 2 and winblock.count('') == 1:
+            for a in i:
+                if board[a] == '':
+                    return a
+
+    # Rule 3: Take center if available
+    if board[4] == '':
+        return 4
+
+    # Rule 4: Take first empty corner or side
+    for j in range(9):
+        if board[j] == '':
+            return j
+
+    # Rule 5: No moves left
+    return None
+
